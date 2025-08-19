@@ -196,3 +196,16 @@ html{scroll-behavior: smooth;}
 .collapsible{overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-8px); transition: max-height .6s ease, opacity .35s ease, transform .35s ease;}
 .collapsible.open{max-height: 2000px; opacity: 1; transform: none;}
 #contacto{background: #faf7fc; padding: 24px 0; border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);}
+body { padding-top: 84px; }
+.navbar .nav-link { font-weight: 600; color: #4a4a4a; }
+.navbar .nav-link:hover { opacity:.8; }
+.navbar .btn.btn-primary { background:#450050; border-color:#450050; }
+.navbar .btn.btn-primary:hover { background:#35003d; border-color:#35003d; }
+.navbar-toggler { border-color: rgba(0,0,0,.15); }
+.navbar-toggler-icon {background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");}
+img { max-width: 100%; height: auto; }
+@media (max-width: 992px){.hero-inner{grid-template-columns: 1fr !important;height: auto !important;padding-top: 18px !important;}
+.hero h1{font-size: clamp(1.9rem, 6vw, 2.4rem) !important;line-height: 1.1 !important;}
+.hero p{ font-size: 1rem !important; }
+.actions .btn{ width: 100%; }}
+@media (max-width: 768px){.grid-cursos{ grid-template-columns: 1fr !important; gap: 22px !important; }.galeria-grid{ grid-template-columns: 1fr !important; gap: 18px !important; }}

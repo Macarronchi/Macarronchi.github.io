@@ -1,0 +1,17 @@
+# Editores / SO
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Binarios y paquetes grandes
+*.exe
+*.msi
+*.zip
+*.rar
+*.7z
+*.iso
+
+# Cosas que NO van en una web estática
+Oracle_JDK*/
+jdk*/
+jre*/

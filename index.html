@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Armonía Viva</title>
+
+  <!-- Bootstrap 5 (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ------------------ MÁS EVENTOS ------------------
+  const btnMas    = document.getElementById('btnMasEventos');
+  const secMas    = document.getElementById('mas-eventos');
+  const eventos   = document.getElementById('eventos');
+  const volverME  = secMas ? secMas.querySelector('a[href="#eventos"]') : null;
+
+  const meTrack   = document.getElementById('meTrack');
+  const mePrev    = document.querySelector('.me-arrow.left');
+  const meNext    = document.querySelector('.me-arrow.right');
+
+  // --- Auto-scroll config
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const AUTO_MS = 4000;
+  let meAuto = null, meRestartTO = null;
+
+  function mePage(){ return meTrack ? meTrack.clientWidth : 0; }
+  function meMax(){  return meTrack ? Math.max(0, meTrack.scrollWidth - meTrack.clientWidth) : 0; }
+
+  function meUpdateArrows(){
+    if (!meTrack || !mePrev || !meNext) return;
+    const m = meMax();
+    mePrev.disabled = meTrack.scrollLeft <= 0;
+    meNext.disabled = meTrack.scrollLeft >= m - 1;
+  }
+
+  function meGoNext(){
+    if (!meTrack) return;
+    const atEnd = meTrack.scrollLeft >= meMax() - 1;
+    if (atEnd) meTrack.scrollTo({ left: 0, behavior:'smooth' });
+    else       meTrack.scrollBy({ left: mePage(), behavior:'smooth' });
+  }
+
+  function meStartAuto(){
+    if (REDUCED || meAuto || !meTrack) return;
+    meAuto = setInterval(meGoNext, AUTO_MS);
+  }
+  function meStopAuto(){
+    if (meAuto){ clearInterval(meAuto); meAuto = null; }
+  }
+  function meRestartSoon(){
+    clearTimeout(meRestartTO);
+    meRestartTO = setTimeout(meStartAuto, 1200);
+  }
+
+  function meRecalcAfterOpen(){
+    // 2 RAFs para asegurar layout visible antes de calcular/habilitar autoplay
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      meUpdateArrows();
+      meStartAuto();
+    }));
+  }
+
+  // Navegación + pausa/reanuda
+  if (mePrev && meNext && meTrack){
+    mePrev.addEventListener('click', () => {
+      meStopAuto();
+      meTrack.scrollBy({ left:-mePage(), behavior:'smooth' });
+      meRestartSoon();
+    });
+    meNext.addEventListener('click', () => {
+      meStopAuto();
+      meGoNext();
+      meRestartSoon();
+    });
+
+    meTrack.addEventListener('scroll', meUpdateArrows);
+    window.addEventListener('resize', meUpdateArrows);
+
+    // Pausar al interactuar y reanudar al salir
+    ['mouseenter','focusin','pointerdown','touchstart','wheel'].forEach(ev =>
+      meTrack.addEventListener(ev, meStopAuto, { passive:true })
+    );
+    ['mouseleave','focusout'].forEach(ev =>
+      meTrack.addEventListener(ev, meStartAuto)
+    );
+
+    // Recalcular cuando carguen imágenes internas
+    meTrack.querySelectorAll('img').forEach(img => {
+      if (!img.complete) img.addEventListener('load', meUpdateArrows, { once:true });
+    });
+
+    // Init
+    meUpdateArrows();
+    meStartAuto();
+  }
+
+  function showMas(){
+    if (!secMas) return;
+    secMas.hidden = false;
+    secMas.classList.add('open');
+    if (meTrack) meTrack.scrollLeft = 0;   // resetea posición
+    meRecalcAfterOpen();                   // calcula flechas + arranca autoplay
+    secMas.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  function hideMas(){
+    if (!secMas) return;
+    secMas.hidden = true;
+    meStopAuto();                          // pausa autoplay al cerrar
+    eventos && eventos.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  btnMas   && btnMas.addEventListener('click', () => secMas.hidden ? showMas() : hideMas());
+  volverME && volverME.addEventListener('click', (e) => { e.preventDefault(); hideMas(); });
+
+  // ------------------ MÁS VIDEOS ------------------
+  // (Sin auto-scroll; tal cual lo tenías)
+  const btnMasVid = document.getElementById('btnMasVideos');
+  const secMasVid = document.getElementById('mas-videos');
+  const volverMV  = secMasVid ? secMasVid.querySelector('.btn-back') : null;
+
+  const mvTrack   = document.getElementById('mvTrack');
+  const mvPrev    = document.querySelector('.mv-arrow.left');
+  const mvNext    = document.querySelector('.mv-arrow.right');
+
+  function mvPage(){ return mvTrack ? mvTrack.clientWidth : 0; }
+  function mvMax(){  return mvTrack ? Math.max(0, mvTrack.scrollWidth - mvTrack.clientWidth) : 0; }
+
+  function mvUpdateArrows(){
+    if (!mvTrack || !mvPrev || !mvNext) return;
+    const m = mvMax();
+    mvPrev.disabled = mvTrack.scrollLeft <= 0;
+    mvNext.disabled = mvTrack.scrollLeft >= m - 1;
+  }
+  function mvRecalcAfterOpen(){
+    requestAnimationFrame(() => requestAnimationFrame(mvUpdateArrows));
+  }
+
+  if (mvPrev && mvNext && mvTrack){
+    mvPrev.addEventListener('click', () => mvTrack.scrollBy({ left:-mvPage(), behavior:'smooth' }));
+    mvNext.addEventListener('click', () => mvTrack.scrollBy({ left: mvPage(),  behavior:'smooth' }));
+    mvTrack.addEventListener('scroll', mvUpdateArrows);
+    window.addEventListener('resize', mvUpdateArrows);
+    mvTrack.querySelectorAll('iframe,img').forEach(el => {
+      el.addEventListener && el.addEventListener('load', mvUpdateArrows, { once:true });
+    });
+  }
+
+  function showMasVid(){
+    if (!secMasVid) return;
+    secMasVid.hidden = false;
+    secMasVid.classList.add('open');
+    if (mvTrack) mvTrack.scrollLeft = 0;
+    mvRecalcAfterOpen();
+    secMasVid.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  function hideMasVid(){
+    if (!secMasVid) return;
+    secMasVid.hidden = true;
+    document.getElementById('videos')?.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  btnMasVid && btnMasVid.addEventListener('click', () => secMasVid.hidden ? showMasVid() : hideMasVid());
+  volverMV  && volverMV.addEventListener('click', (e) => { e.preventDefault(); hideMasVid(); });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const track = document.getElementById('testiTrack');
+  if (!track) return;
+
+  const prev = document.querySelector('.t-arrow.left');
+  const next = document.querySelector('.t-arrow.right');
+
+  // --- Flechas
+  const page = () => track.clientWidth;
+  function getMax(){ return Math.max(0, track.scrollWidth - track.clientWidth); }
+  function updateArrows(){
+    const m = getMax();
+    if (prev) prev.disabled = track.scrollLeft <= 0;
+    if (next) next.disabled = track.scrollLeft >= m - 1;
+  }
+  prev?.addEventListener('click', () => { stop(); track.scrollBy({ left:-page(), behavior:'smooth' }); restartSoon(); });
+  next?.addEventListener('click', () => { stop(); track.scrollBy({ left: page(),  behavior:'smooth' }); restartSoon(); });
+  track.addEventListener('scroll', updateArrows);
+
+  // --- Auto desplazamiento continuo
+  let raf = null, lastTs = 0, dir = 1;   // 1 => derecha, -1 => izquierda
+  const SPEED = 60;                      // px/seg
+  const RESPECT_REDUCED = false;
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Guardamos/restauramos scroll-snap
+  const cssSnap = getComputedStyle(track).scrollSnapType;
+  function disableSnap(){ track.style.scrollSnapType = 'none'; }
+  function restoreSnap(){ track.style.scrollSnapType = ''; }
+
+  function tick(ts){
+    if (!lastTs) lastTs = ts;
+    const dt = (ts - lastTs) / 1000;
+    lastTs = ts;
+
+    const max = getMax();
+    let left = track.scrollLeft + dir * SPEED * dt;
+
+    if (left <= 0){ left = 0; dir = 1; }
+    else if (left >= max){ left = max; dir = -1; }
+
+    track.scrollLeft = left;
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start(){
+    if ((RESPECT_REDUCED && REDUCED) || raf) return;
+    lastTs = 0;
+    disableSnap();
+    raf = requestAnimationFrame(tick);
+  }
+  function stop(){
+    if (raf){ cancelAnimationFrame(raf); raf = null; }
+    restoreSnap();
+  }
+
+  let restartTO = null;
+  function restartSoon(){
+    clearTimeout(restartTO);
+    restartTO = setTimeout(start, 1200);
+  }
+
+  // Pausar al interactuar y reanudar al salir
+  ['mouseenter','focusin','pointerdown','wheel','touchstart'].forEach(ev =>
+    track.addEventListener(ev, stop, { passive:true })
+  );
+  ['mouseleave','focusout'].forEach(ev =>
+    track.addEventListener(ev, start)
+  );
+
+  // Recalcular al redimensionar / cambiar pestaña
+  window.addEventListener('resize', updateArrows);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop(); else start();
+  });
+
+  updateArrows();
+  start();
+});
+</script>
+</head>
+  <header class="topbar">
+  <nav class="nav" aria-label="Principal">
+    <div class="brand">
+      <img src="img/logo.png" alt="Armonía Viva">
+    </div>
+
+    <div class="menu">
+      <a href="#inicio">Inicio</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#calendario">Calendario</a>
+      <a href="#eventos">Galería</a>
+      <a href="#videos">Videos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+
+    <div class="auth">
+      <a class="btn btn-login" href="login.html">Ingresar</a>
+      <a class="cta btn btn-primary rounded-3 px-3" href="registro.html">Inscríbete</a>
+    </div>
+  </nav>
+</header>
+
+
+  <section id="inicio" class="hero">
+    <div class="hero-inner">
+      <div>
+        <h1>Descubre el músico que llevas dentro</h1>
+        <p>En Armonía Viva transformamos tu pasión por la música en habilidades reales con nuestros cursos especializados.</p>
+        <div class="actions d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary btn-lg rounded-3" href="registro.html">Empieza ahora</a>
+          <a class="btn btn-outline-light btn-lg rounded-3" href="#cursos">Ver cursos</a>
+        </div>
+      </div>
+      <div class="art">
+          <img src="img/DaftPunk.png" alt="lol">
+      </div>
+
+    </div>
+  </section>
+
+  <section id="cursos" class="wrap container">
+  <h2 class="titulo">Nuestros cursos</h2>
+  <p class="subtitulo">Ofrecemos una gran variedad de cursos diseñados para cualquier tipo de nivel, desde principiantes hasta músicos avanzados</p>
+
+  <div class="grid-cursos">
+    <div class="curso guitarra-acustica">
+      <div class="icono"><img src="img/Guitarra_Ac.png" alt="Guitarra Acústica"></div>
+      <div class="curso-info">
+        <h2>Guitarra Acústica</h2>
+        <p>Toca las cuerdas de la guitarra y deja que cada nota le dé ritmo, emoción y sentido a tu vida.</p>
+        <div class="precio">$149.900/mes</div>
+      </div>
+    </div>
+
+    <div class="curso guitarra-electrica">
+      <div class="icono"><img src="img/Guitarra_Elec.png" alt="Guitarra Eléctrica"></div>
+      <div class="curso-info">
+        <h2>Guitarra Eléctrica</h2>
+        <p>Siente el poder en tus manos y transforma cada nota eléctrica en pura energía.</p>
+        <div class="precio">$179.900/mes</div>
+      </div>
+    </div>
+
+    <div class="curso bateria">
+      <div class="icono"><img src="img/Bateria.png" alt="Batería"></div>
+      <div class="curso-info">
+        <h2>Batería</h2>
+        <p>Haz temblar el suelo, sacude el alma: la batería no se toca, se vive.</p>
+        <div class="precio">$199.900/mes</div>
+      </div>
+    </div>
+
+    <div class="curso saxofon">
+      <div class="icono"><img src="img/Saxo.png" alt="Saxofón"></div>
+      <div class="curso-info">
+        <h2>Saxofón</h2>
+        <p>Sopla con pasión y deja que el saxofón cuente tu historia en cada melodía.</p>
+        <div class="precio">$189.900/mes</div>
+      </div>
+    </div>
+
+    <div class="curso canto">
+      <div class="icono"><img src="img/Microfono.png" alt="Canto"></div>
+      <div class="curso-info">
+        <h2>Canto</h2>
+        <p>Tu voz es única: atrévete a descubrirla y a tocar corazones cantando.</p>
+        <div class="precio">$139.900/mes</div>
+      </div>
+    </div>
+
+    <div class="curso piano">
+      <div class="icono"><img src="img/Piano.png" alt="Piano"></div>
+      <div class="curso-info">
+        <h2>Piano Clásico</h2>
+        <p>Cada tecla del piano clásico abre la puerta a un mundo lleno de emociones y belleza.</p>
+        <div class="precio">$219.900/mes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calendario" class="wrap container">
+  <h2 class="titulo-calendario">Calendario de Clases</h2>
+  <p class="subtitulo-calendario">Consulta nuestras clases programadas e inscríbete</p>
+
+  <div class="cal-grid">
+    <div class="cal-header"></div>
+    <div class="cell head empty" style="grid-column:1; grid-row:2;"></div>
+    <div class="cell head" style="grid-column:2; grid-row:2;">Lunes</div>
+    <div class="cell head" style="grid-column:3; grid-row:2;">Martes</div>
+    <div class="cell head" style="grid-column:4; grid-row:2;">Miércoles</div>
+    <div class="cell head" style="grid-column:5; grid-row:2;">Jueves</div>
+    <div class="cell head" style="grid-column:6; grid-row:2;">Viernes</div>
+    <div class="cell head" style="grid-column:7; grid-row:2;">Sábado</div>
+    <div class="cell hour" style="grid-column:1; grid-row:3;">8:00 a. m</div>
+    <div class="cell hour" style="grid-column:1; grid-row:4;">9:00 a. m</div>
+    <div class="cell hour" style="grid-column:1; grid-row:5;">10:00 a. m</div>
+    <div class="cell hour" style="grid-column:1; grid-row:6;">11:00 a. m</div>
+    <div class="cell hour" style="grid-column:1; grid-row:7;">12:00 m</div>
+    <div class="cell hour" style="grid-column:1; grid-row:8;">1:00 p. m</div>
+
+    <!-- Lunes -->
+    <article class="event guitarra-electrica" style="grid-column:2; grid-row:3 / span 3;">
+      <div class="ev-inner"><img src="img/Guitarra_Elec.png" alt=""><h4>Guitarra Eléctrica</h4></div>
+    </article>
+    <article class="event saxofon" style="grid-column:2; grid-row:6 / span 3;">
+      <div class="ev-inner"><img src="img/Saxo.png" alt=""><h4>Saxofón</h4></div>
+    </article>
+    <!-- Martes -->
+    <article class="event guitarra-acustica" style="grid-column:3; grid-row:3 / span 2;">
+     <div class="ev-inner"><img src="img/Guitarra_Ac.png" alt=""><h4>Guitarra Acústica</h4></div>
+    </article>
+    <article class="event piano" style="grid-column:3; grid-row:5 / span 4;">
+      <div class="ev-inner"><img src="img/Piano.png" alt=""><h4>Piano</h4></div>
+    </article>
+
+    <!-- Miércoles -->
+    <article class="event bateria" style="grid-column:4; grid-row:3 / span 3;">
+      <div class="ev-inner"><img src="img/Bateria.png" alt=""><h4>Batería</h4></div>
+    </article>
+
+    <article class="event canto" style="grid-column:4; grid-row:6 / span 3;">
+      <div class="ev-inner"><img src="img/Microfono.png" alt=""><h4>Canto</h4></div>
+    </article>
+
+    <!-- Jueves -->
+    <article class="event saxofon" style="grid-column:5; grid-row:3 / span 4;">
+      <div class="ev-inner"><img src="img/Saxo.png" alt=""><h4>Saxofón</h4></div>
+    </article>
+    <article class="event guitarra-acustica" style="grid-column:5; grid-row:7 / span 2;">
+      <div class="ev-inner"><img src="img/Guitarra_Ac.png" alt=""><h4>Guitarra Acústica</h4></div>
+    </article>
+
+    <!-- Viernes -->
+    <article class="event piano" style="grid-column:6; grid-row:3 / span 4;">
+      <div class="ev-inner"><img src="img/Piano.png" alt=""><h4>Piano</h4></div>
+    </article>
+    <article class="event bateria" style="grid-column:6; grid-row:7 / span 2;">
+      <div class="ev-inner"><img src="img/Bateria.png" alt=""><h4>Batería</h4></div>
+    </article>
+
+    <!-- Sábado -->
+    <article class="event guitarra-electrica" style="grid-column:7; grid-row:3 / span 3;">
+      <div class="ev-inner"><img src="img/Guitarra_Elec.png" alt=""><h4>Guitarra Eléctrica</h4></div>
+    </article>
+    <article class="event canto" style="grid-column:7; grid-row:6 / span 3;">
+      <div class="ev-inner"><img src="img/Microfono.png" alt=""><h4>Canto</h4></div>
+    </article>
+    <div class="cal-footer"></div>
+  </div>
+</section>
+
+  <section id="eventos" class="wrap galeria container">
+  <h2 class="titulo">Galería de Eventos</h2>
+  <p class="subtitulo">Momentos especiales de nuestros estudiantes y presentaciones</p>
+
+  <!-- Guitarristas -->
+  <div class="galeria-grid">
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/Guitarras.png" alt="Concierto de guitarras acústicas">
+      </div>
+      <figcaption>
+        <h4 class="cap-title">Cuatro cuerdas, una ovación</h4>
+        <p class= "cap-text">Cuatro guitarras, un mismo latido. Nuestro ensamble estrella en vivo.</p>
+        </figcaption>
+    </figure>
+
+    <!-- Niño Guitarra -->
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/GuitarKid.png" alt="Joven guitarrista en tarima">
+        </div>
+      <figcaption>
+        <h4 class="cap-title">Tu primer gran escenario</h4>
+        <p class= "cap-text">Energía pura ante una multitud.</p>
+        </figcaption>
+    </figure>
+
+    <!-- Banda -->
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/Banda.png" alt="Banda en festival">
+        </div>
+      <figcaption>
+        <h4 class="cap-title">Cuando el ritmo manda</h4>
+        <p class="cap-text">Solo de batería que enciende todo.</p>
+      </figcaption>
+    </figure>
+
+    <!-- Mon Laferte -->
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/Monlafuerte.png" alt="Vocalista en close up">
+        </div>
+      <figcaption>
+        <h4 class="cap-title">Te dejará hipnotizado</h4>
+        <p class="cap-text">Bolero con alma y flores.</p>
+        </figcaption>
+    </figure>
+
+    <!-- Piano -->
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/PianoClase.png" alt="Clase de piano">
+      </div>
+      <figcaption>
+        <h4 class="cap-title">Teclas que susurran</h4>
+        <p class= "cap-text"> Piano a oscuras, emoción a flor de piel.</p>
+      </figcaption>
+    </figure>
+
+    <!-- Saxofon -->
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/SaxoFon.png" alt="Solista de saxofón">
+      </div>
+      <figcaption>
+        <h4 class="cap-title">Saxo al rojo vivo</h4>
+        <p class= "cap-text"> Saxo que prende la fiesta. Groove, brillo y actitud.</p>
+        </figcaption>
+    </figure>
+
+    <!-- Creep -->
+    <figure class="gal-item">
+      <div class="img-box">
+        <img src="img/Creep.png" alt="Banda indie en escenario">
+      </div>
+      <figcaption>
+        <h4 class="cap-title">Rock que eriza</h4>
+        <p class= "cap-text"> Un clásico que siempre vuelve.</p>
+        </figcaption>
+    </figure>
+
+    <!-- Fredddy Mercury -->
+    <figure class="gal-item">
+      <div class="img-box">
+      <img src="img/Freddy_Mercuri.png" alt="Homenaje a Freddie Mercury">
+      </div>
+      <figcaption>
+        <h4 class="cap-title">La voz inmortal</h4>
+        <p class= "cap-text"> Himnos que erizan la piel. Una voz inmortal al micrófono.</p>
+        </figcaption>
+    </figure>
+  </div>
+</section>
+<div class="gal-cta">
+  <button id="btnMasEventos" class="btn-more" type="button">
+    Ver más eventos
+  </button>
+</div>
+
+<section id="mas-eventos" class="wrap more-events" hidden>
+  <h2 class="titulo">Galería de Momentos Musicales</h2>
+  <p class="subtitulo">Nuestros estudiantes dominando las cuerdas con pasión y técnica.</p>
+
+  <!-- Hero / Slider -->
+  <div class="me-hero">
+    <button class="me-arrow left" aria-label="Anterior">&larr;</button>
+
+    <div class="me-track" id="meTrack">
+      <figure class="me-slide">
+        <img src="img/pianovelas.jpg" alt="Clases de piano">
+        <figcaption>
+          <h3>Chopin a la luz de las velas</h3>
+            <p>Piano y violonchelo dialogan en susurros cálidos, mientras la sala respira silencio.</p>
+        </figcaption>
+      </figure>
+
+      <figure class="me-slide">
+        <img src="img/saxodesfile.jpg" alt="Desfile de Saxos">
+        <figcaption>
+          <h3>Ritmo que camina</h3>
+            <p>La banda avanza a paso firme: saxos al frente, ciudad en compás.</p>
+        </figcaption>
+      </figure>
+
+      <figure class="me-slide">
+        <img src="img/cantoconcierto.jpg" alt="Concierto de canto">
+        <figcaption>
+          <h3>Somos coro</h3>
+            <p>Un solo grito desde la multitud: cada verso, un abrazo colectivo.</p>
+        </figcaption>
+      </figure>
+
+      <figure class="me-slide">
+        <img src="img/liliana.png" alt="Solo de liliana">
+        <figcaption>
+          <h3>Doble destello</h3>
+            <p>Una guitarra, dos presencias: el riff rompe la oscuridad y se queda en la piel.</p>
+        </figcaption>
+      </figure>
+    </div>
+
+    <button class="me-arrow right" aria-label="Siguiente">&rarr;</button>
+  </div>
+
+  <h3 class="titulo titulo-sec">Más momentos</h3>
+  <div class="me-grid">
+  <figure class="me-card" tabindex="0">
+    <img src="img/Electronica.jpg" alt="Banda en festival">
+    <figcaption>
+      <div>
+        <h4>Noche electrónica</h4>
+        <p>Luces, drops y una multitud latiendo al mismo beat.</p>
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure class="me-card" tabindex="0">
+    <img src="img/Merengue.jpg" alt="Rock en vivo">
+    <figcaption>
+      <div>
+        <h4>Ritmo Caribe</h4>
+        <p>Colores y coros que prenden cualquier escenario.</p>
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure class="me-card" tabindex="0">
+    <img src="img/Equipo.avif" alt="Vocalista en close up">
+    <figcaption>
+      <div>
+        <h4>Indie al aire</h4>
+        <p>Guitarras y sintes en una noche de verano.</p>
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure class="me-card" tabindex="0">
+    <img src="img/Guitarrax.webp" alt="Homenaje a Freddie Mercury">
+    <figcaption>
+      <div>
+        <h4>Solo que corta el aire</h4>
+        <p>Un riff preciso que enciende al público.</p>
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure class="me-card" tabindex="0">
+    <img src="img/pelaos.jpeg" alt="Concierto de guitarras">
+    <figcaption>
+      <div>
+        <h4>Jóvenes en escena</h4>
+        <p>La primera tarima, el primer aplauso. Puro corazón.</p>
+      </div>
+    </figcaption>
+  </figure>
+
+  <figure class="me-card" tabindex="0">
+    <img src="img/saxos.jpg" alt="Pianista en escena">
+    <figcaption>
+      <div>
+        <h4>Sección de vientos</h4>
+        <p>Saxos al frente y la calle hecha melodía.</p>
+      </div>
+    </figcaption>
+  </figure>
+</div>
+
+  <div class="gal-cta">
+    <a class="btn-more outline" href="#eventos">Volver a la galería</a>
+  </div>
+</section>
+
+    <!-- Video Clases -->
+<section id="videos" class="wrap container">
+  <h2 class="titulo">Video de Clases</h2>
+  <p class="subtitulo">Momentos especiales de nuestros estudiantes y presentaciones</p>
+
+  <div class="videos-grid">
+
+    <!-- Piano Basico -->
+    <article class="video-card">
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/kAALQ4JEY6c?rel=0&modestbranding=1"
+          title="Clase de Piano Básico"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <h3>Clase de Piano Básico</h3>
+      <p>Técnicas de movimiento de dedos y aprendizaje con la profesora Sandra.</p>
+    </article>
+
+    <!-- Canto basico -->
+    <article class="video-card">
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/UVUwP8AqD1g?rel=0&modestbranding=1"
+          title="Clase de Canto Básico"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <h3>Clase de Canto Básico</h3>
+      <p>Control de cuerdas vocales y timbre de la voz con la profesora Jimena.</p>
+    </article>
+
+    <!-- Saxo Intermedio -->
+    <article class="video-card">
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/uk2qkx4oyHs?rel=0&modestbranding=1"
+          title="Clase de Saxofón Intermedio"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <h3>Clase de Saxofón Intermedio</h3>
+      <p>Respiración, cañas y sonoridad del solfeo con el profesor Julio.</p>
+    </article>
+
+    <!-- bateria Basico -->
+    <article class="video-card">
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/aLzICL_gPgA?rel=0&modestbranding=1"
+          title="Clase de Batería Básico"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <h3>Clase de Batería Básico</h3>
+      <p>Golpes esenciales y grooves con el profesor Andrés.</p>
+    </article>
+
+    <!-- Guitarra Ac Avanazado -->
+    <article class="video-card">
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/-COrB11yUsE?rel=0&modestbranding=1"
+          title="Clase de Guitarra Clásica Avanzada"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <h3>Clase de Guitarra Clásica Avanzada</h3>
+      <p>Timbres y digitación de solfeo en la guitarra con el profesor Max.</p>
+    </article>
+
+    <!-- Guitarra El Avanazado -->
+    <article class="video-card">
+      <div class="video-frame">
+        <iframe
+          src="https://www.youtube.com/embed/El5S9q84my8?rel=0&modestbranding=1"
+          title="Clase de Guitarra Eléctrica Avanzada"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+      <h3>Clase de Guitarra Eléctrica Avanzada</h3>
+      <p>Técnica, velocidad y control de tono con el profesor Pedro.</p>
+    </article>
+  </div>
+</section>
+<div class="gal-cta">
+  <button id="btnMasVideos" class="btn-more" type="button">
+    Ver más videos
+  </button>
+</div>
+
+<section id="mas-videos" class="more-section" hidden>
+  <div class="wrap">
+
+    <div class="more-shell">
+      <button class="mv-arrow left" aria-label="Anterior">‹</button>
+
+      <div class="more-track" id="mvTrack">
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/AdQowE9XZno?rel=0&modestbranding=1"
+              title="Piano básico (extra)" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <h3>Piano básico (extra)</h3>
+          <p>Más recursos prácticos para la independencia de dedos.</p>
+        </article>
+
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/CbS2ewVrWkk?rel=0&modestbranding=1"
+              title="Canto básico (extra)" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <h3>Canto básico (extra)</h3>
+          <p>Respiración, colocación y afinación guiada.</p>
+        </article>
+
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/t7TBb0HbuH0?rel=0&modestbranding=1"
+              title="Saxofón intermedio (extra)" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <h3>Saxofón intermedio (extra)</h3>
+          <p>Cañas, embocadura y articulación.</p>
+        </article>
+
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/84p-P3Z0UUA?rel=0&modestbranding=1"
+              title="Batería básico (extra)" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <h3>Batería básico (extra)</h3>
+          <p>Grooves y coordinación paso a paso.</p>
+        </article>
+
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/eJGs9_kgRyg?rel=0&modestbranding=1"
+              title="Guitarra clásica avanzada (extra)" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <h3>Guitarra clásica avanzada (extra)</h3>
+          <p>Digitación y timbres extendidos.</p>
+        </article>
+
+        <article class="video-card">
+          <div class="video-frame">
+            <iframe src="https://www.youtube.com/embed/kZI3VuGTrpE?rel=0&modestbranding=1"
+              title="Guitarra eléctrica avanzada (extra)" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <h3>Guitarra eléctrica avanzada (extra)</h3>
+          <p>Técnica, velocidad y control de tono.</p>
+        </article>
+      </div>
+
+      <button class="mv-arrow right" aria-label="Siguiente">›</button>
+    </div>
+  </div>
+  <div class="more-foot">
+      <a href="#eventos" class="btn-back">Volver a la galería de eventos</a>
+    </div>
+  </div>
+</section>
+</section>
+
+<!-- Reseñas -->
+<section id="reseñas" class="wrap testimonios container">
+  <h2 class="titulo">Lo que dicen nuestros usuarios</h2>
+  <p class="subtitulo">Experiencias reales de estudiantes que cambiaron su vida con música</p>
+
+  <div class="testi-shell">
+    <button class="t-arrow left" aria-label="Ver reseñas anteriores">&larr;</button>
+
+    <div class="testi-track" id="testiTrack">
+      <!-- 1 -->
+      <article class="testi-card">
+        <div class="t-head">
+          <div class="avatar">A</div>
+          <div>
+            <h4>Ana Sofía</h4>
+            <small>Estudiante de batería</small>
+          </div>
+        </div>
+        <p>“En pocos meses aprendí lo suficiente para sorprender a mis amigos y familia. ¡100% recomendado!”</p>
+        <div class="stars">★★★★★</div>
+      </article>
+
+      <!-- 2 -->
+      <article class="testi-card">
+        <div class="t-head">
+          <div class="avatar">L</div>
+          <div>
+            <h4>Luis Alfonso</h4>
+            <small>Estudiante de canto</small>
+          </div>
+        </div>
+        <p>“La metodología es diferente y efectiva. Los profes son muy pacientes y amables.”</p>
+        <div class="stars">★★★★★</div>
+      </article>
+
+      <!-- 3 -->
+      <article class="testi-card">
+        <div class="t-head">
+          <div class="avatar">M</div>
+          <div>
+            <h4>Marcela Díaz</h4>
+            <small>Estudiante de guitarra</small>
+          </div>
+        </div>
+        <p>“Pasé de no ubicar el Do o el La a tocar con seguridad en 9 meses.”</p>
+        <div class="stars">★★★★★</div>
+      </article>
+
+      <!-- 4 -->
+      <article class="testi-card">
+        <div class="t-head">
+          <div class="avatar">P</div>
+          <div>
+            <h4>Paula López</h4>
+            <small>Estudiante de saxofón</small>
+          </div>
+        </div>
+        <p>“Armonía Viva es una escuela con magia; profesores y comunidad increíbles.”</p>
+        <div class="stars">★★★★★</div>
+      </article>
+
+      <!-- 5 -->
+      <article class="testi-card">
+        <div class="t-head">
+          <div class="avatar">J</div>
+          <div>
+            <h4>Juan Herrera</h4>
+            <small>Estudiante de piano</small>
+          </div>
+        </div>
+        <p>“Las clases online se sienten cercanas. Progreso real semana a semana.”</p>
+        <div class="stars">★★★★★</div>
+      </article>
+
+      <!-- 6 -->
+      <article class="testi-card">
+        <div class="t-head">
+          <div class="avatar">C</div>
+          <div>
+            <h4>Camila Rojas</h4>
+            <small>Estudiante de batería</small>
+          </div>
+        </div>
+        <p>“Ritmo y técnica sin perder la diversión. ¡Me encanta!”</p>
+        <div class="stars">★★★★★</div>
+      </article>
+    </div>
+
+    <button class="t-arrow right" aria-label="Ver más reseñas">&rarr;</button>
+  </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<section id="cta-final" class="cta-band">
+  <div class="cta-inner">
+    <h2>¿Listo para comenzar?</h2>
+    <p>¿Tienes dudas o deseas inscribirte? Escríbenos y te responderemos pronto.</p>
+    <div class="cta-actions">
+      <a href="#contacto" id="btnContacto" class="btn-cta solid">Contáctanos</a>
+      <a href="registro.html" class="btn-cta ghost">Inscríbete ahora</a>
+    </div>
+  </div>
+</section>
+
+<section id="contacto" class="collapsible" hidden>
+  <div class="wrap container" style="max-width:1100px;">
+    <h2 class="titulo">Contáctanos</h2>
+    <p class="subtitulo">¿Tienes dudas o deseas inscribirte? Escríbenos y te respondemos pronto.</p>
+
+    <form class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" required>
+      </div>
+      <div class="col-12">
+        <label class="form-label">Mensaje</label>
+        <textarea class="form-control" rows="6" required></textarea>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Enviar</button>
+      </div>
+    </form>
+  </div>
+</section>
+<footer class="site-foot">
+  <div class="foot-inner">
+    <div class="foot-brand">Armonía Viva</div>
+    <div class="foot-copy">© 2025 Armonía Viva. Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btnContacto  = document.getElementById('btnContacto');
+  const secContacto  = document.getElementById('contacto');
+
+  if (!btnContacto || !secContacto) return;
+
+  // Abre el panel (quita hidden y anima)
+  function openContacto() {
+    if (!secContacto.hidden) return;
+    secContacto.hidden = false;
+    // Deja que el navegador pinte y luego añade la clase para animar
+    requestAnimationFrame(() => secContacto.classList.add('open'));
+    secContacto.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  // Cierra el panel (anima y al final vuelve a hidden)
+  function closeContacto() {
+    if (secContacto.hidden) return;
+    secContacto.classList.remove('open');
+    secContacto.addEventListener('transitionend', () => {
+      if (!secContacto.classList.contains('open')) secContacto.hidden = true;
+    }, { once:true });
+  }
+
+  // Toggle desde el CTA
+  btnContacto.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (secContacto.hidden) openContacto(); else closeContacto();
+  });
+
+  // Si alguien hace click en cualquier enlace del menú que apunte a #contacto,
+  // asegúrate de abrir el panel y hacer scroll.
+  document.querySelectorAll('a[href="#contacto"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      openContacto();
+    });
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.querySelector('#contacto form');
+  if (!form) return;
+
+  const btn = form.querySelector('button[type="submit"]');
+  const originalHTML = btn.innerHTML;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();                 // evita el envío real (demo)
+    btn.disabled = true;
+
+    // (Opcional) mostrar "Enviando..."
+    // btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Enviando...';
+
+    // Simulamos un envío breve y luego “Enviado”
+    setTimeout(() => {
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-success');
+      btn.innerHTML = '<i class="fas fa-check me-2" aria-hidden="true"></i>Enviado';
+
+      // Volver al estado original después de 2.4s
+      setTimeout(() => {
+        btn.classList.remove('btn-success');
+        btn.classList.add('btn-primary');
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+        form.reset(); // opcional: limpia el formulario
+      }, 2400);
+    }, 300); // pequeño delay para sensación de respuesta
+  });
+});
+</script>
+</body>
+</html>

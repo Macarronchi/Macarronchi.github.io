@@ -211,58 +211,96 @@ html{scroll-behavior: smooth;}
 .testi-card{ min-width: 82% !important; scroll-snap-align: start !important; }}
 
 /* Ocultar menú y mostrar hamburguesa */
-@media (max-width:768px){
-  .topbar .nav{
-    display:grid;
-    grid-template-columns:auto 1fr auto;  /* logo | botones | ☰ */
-    align-items:center;
-    gap:8px;
-    min-height:56px;
-    padding:8px 12px;
-    box-sizing:border-box;
+@media (min-width:769px){
+  header.topbar .nav{
+    height:82px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:24px !important;
+    padding:0 24px !important;
   }
-
-  /* Logo SOLO móvil (gana sí o sí) */
   header.topbar .brand img{
-    height:28px !important;
-    max-height:28px !important;
-    width:auto;
+    height:100px !important; max-height:200px !important; width:auto !important;
+  }
+  header.topbar .nav .menu{
+    display:flex !important; gap:40px !important; flex-grow:1 !important; justify-content:center !important;
+  }
+}
+
+/* ====== MÓVIL (<=768px) ====== */
+@media (max-width:768px){
+  /* Grid: logo | botones | ☰  (sin wraps) */
+  header.topbar .nav{
+    display:grid !important;
+    grid-template-columns:auto 1fr auto !important;
+    align-items:center !important;
+    gap:8px !important;
+    min-height:56px !important;
+    padding:8px 12px !important;
+    box-sizing:border-box !important;
   }
 
-  /* Botones compactos y corridos a la izquierda */
-  .auth{
-    grid-column:2;
-    justify-self:end;
-    display:flex; gap:6px;
-    white-space:nowrap; min-width:0;
-    margin-right:14px;                 /* los separa de la hamburguesa */
+  /* Logo solo móvil */
+  header.topbar .brand img{
+    height:28px !important; max-height:28px !important; width:auto;
+  }
+
+  /* Botones compactos (píldora morada en Inscríbete) */
+  header.topbar .auth{
+    grid-column:2; justify-self:end !important;
+    display:flex !important; gap:6px !important;
+    white-space:nowrap !important; min-width:0 !important;
+    margin-right:14px !important;
     flex-wrap:nowrap !important;
   }
-  .auth .btn-login{
+  header.topbar .auth .btn-login{
     padding:4px 8px !important;
     font-size:.84rem !important;
     border-radius:12px !important;
   }
-  .auth .cta{
+  header.topbar .auth .cta{
     padding:4px 10px !important;
     font-size:.84rem !important;
-    background:var(--brand) !important;
-    color:#fff !important;
+    background:var(--brand) !important; color:#fff !important;
     border:2px solid var(--brand) !important;
-    border-radius:16px !important;     /* vuelve el pill morado */
+    border-radius:16px !important;
   }
 
-  .hamburger{
-    grid-column:3; justify-self:end;
-    width:34px; height:34px; display:grid; place-items:center;
+  /* Hamburguesa fija en la 3ª columna */
+  header.topbar .hamburger{
+    grid-column:3; justify-self:end !important;
+    width:34px; height:34px; display:grid !important; place-items:center;
     font-size:1.4rem; background:none; border:0; color:var(--brand);
-    position:static;
-    z-index:200;
+    position:static !important; z-index:200;
+  }
+
+  /* Menú oculto hasta toggle (.active) */
+  header.topbar .nav .menu{
+    display:none !important;
+    position:absolute; left:8px; right:8px; top:calc(100% + 8px);
+    background:#fff; padding:12px; border-radius:12px;
+    box-shadow:0 12px 24px rgba(0,0,0,.12); z-index:150;
+    grid-template-columns:1fr; gap:10px;
+  }
+  header.topbar .nav .menu.active{ display:grid !important; }
+}
+
+/* ====== HÉROE en pantallas chicas (ajuste de layout) ====== */
+@media (max-width:992px){
+  .hero-inner{
+    grid-template-columns:1fr !important;
+    height:auto !important;
+    text-align:center !important;
+    gap:18px !important;
+    padding-top:28px !important;
+  }
+  .hero .art img{
+    width:82% !important; height:auto !important; margin:0 auto !important;
   }
 }
 
-/* HÉROE en móvil por si quedó “raro” por la llave perdida alguna vez */
-@media (max-width:992px){
-  .hero-inner{ grid-template-columns:1fr !important; height:auto !important; text-align:center !important; gap:18px !important; padding-top:28px !important; }
-  .hero .art img{ width:82% !important; height:auto !important; margin:0 auto !important; }
+/* Extra-angostos */
+@media (max-width:380px){
+  header.topbar .auth a{ padding:3px 6px !important; font-size:.80rem !important; }
 }

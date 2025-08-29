@@ -223,11 +223,12 @@ html{scroll-behavior: smooth;}
     grid-template-columns:auto 1fr auto !important; /* logo | botones | ☰ */
     align-items:center !important;
     column-gap:14px !important;     /* <-- separa botones y hamburguesa */
-    height:auto !important; min-height:56px !important;
+    height: 26px !important;     /* antes 18px */
+    max-height: 26px
     padding:8px 12px !important;
     position:relative !important;
     box-sizing:border-box !important;
-  }
+  }}
 
   /* logo más pequeño */
   .topbar .brand img{ height:18px !important; max-height:18px !important; }
@@ -241,8 +242,8 @@ html{scroll-behavior: smooth;}
   }
   .auth a{
     display:flex; align-items:center; justify-content:center;
-    min-height:28px !important; padding:4px 8px !important;
-    font-size:.80rem !important; line-height:1 !important;
+    min-height:28px !important; padding:4px 9px !important;
+    font-size:.84rem !important; line-height:1 !important;
     border-width:2px !important;
   }
   .auth .btn-login{ border-radius:12px !important; }

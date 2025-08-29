@@ -212,60 +212,70 @@ html{scroll-behavior: smooth;}
 /* menú hamburguesa */
 
 @media (max-width:768px){
-  /* el nav deja hueco a la derecha para la hamburguesa */
+  /* fila con hueco a la derecha para la hamburguesa */
   .topbar .nav{
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    width: 100% !important;
-    padding: 8px 72px 8px 12px !important; /* <- hueco grande a la derecha */
-    box-sizing: border-box !important;
+    position:relative !important;
+    display:flex !important;
+    align-items:center !important;
+    flex-wrap:nowrap !important;
+    gap:6px !important;
+    width:100% !important;
+    padding:8px 64px 8px 12px !important; /* <-- reserva para la hamburguesa */
+    box-sizing:border-box !important;
   }
 
-  .brand img{ height:32px !important; max-height:32px !important; }
+  /* logo más pequeño */
+  .brand img{ height:26px !important; max-height:26px !important; }
 
-  /* botones compactos y no se “estiran” debajo de la hamburguesa */
+  /* grupo de botones compacto */
   .auth{
-    order: 2;
-    margin-left: auto;
-    display: flex; gap: 8px;
-    flex: 0 1 auto;                 /* <- evita ocupar todo el ancho */
-    position: relative; z-index: 80;
+    order:2;
+    margin-left:auto;              /* pega los botones a la derecha del logo */
+    display:flex; gap:6px;
+    flex:0 1 auto;                 /* no se expanden a 2 líneas */
+    align-items:center;
+    z-index:80; position:relative;
   }
   .auth a{
     display:flex; align-items:center; justify-content:center;
-    min-height:34px; padding:5px 10px !important;
-    font-size:.88rem !important; line-height:1 !important; white-space:nowrap;
+    min-height:30px;
+    padding:4px 10px !important;
+    font-size:.88rem !important;
+    line-height:1 !important;
+    white-space:nowrap;
     border-width:2px;
   }
-  .auth .btn-login{ background:#fff; color:var(--brand); border:2px solid var(--brand); border-radius:14px; }
-  .auth .cta{ background:var(--brand); color:#fff; border:2px solid var(--brand); border-radius:18px; }
+  .auth .btn-login{
+    background:#fff; color:var(--brand);
+    border:2px solid var(--brand); border-radius:12px;
+  }
+  .auth .cta{
+    background:var(--brand); color:#fff;
+    border:2px solid var(--brand); border-radius:18px;
+  }
 
-  /* HAMBURGUESA SIEMPRE VISIBLE, fuera del flujo y con contraste */
+  /* hamburguesa fija y siempre visible */
   .hamburger{
-    position: absolute; right: 12px; top: 50%;
-    transform: translateY(-50%);
-    width: 40px; height: 40px;
-    display: grid !important; place-items: center;
-    font-size: 1.7rem; line-height: 1;
-    color: var(--brand);
-    background: #fff;                 /* <- contraste sobre el botón morado */
-    border-radius: 10px;              /* puedes quitarlo si no lo quieres */
-    z-index: 120 !important;
-    border: 0;
+    position:absolute; right:12px; top:50%;
+    transform:translateY(-50%);
+    width:38px; height:38px;
+    display:grid !important; place-items:center;
+    font-size:1.5rem; line-height:1;
+    background:none; border:0; color:var(--brand);
+    z-index:120 !important;
   }
 
-  /* menú desplegable de borde a borde */
+  /* menú desplegable a lo ancho del nav */
   .topbar .nav .menu{
-    display: none !important;
-    position: absolute; left: 0; right: 0; top: 100%;
-    margin-top: 8px; background:#fff; padding:12px; border-radius:12px;
-    box-shadow: 0 12px 24px rgba(0,0,0,.12); z-index:110;
-    grid-template-columns: 1fr; gap: 10px;
+    display:none !important;
+    position:absolute; left:0; right:0; top:100%;
+    margin-top:8px;
+    background:#fff; padding:12px; border-radius:12px;
+    box-shadow:0 12px 24px rgba(0,0,0,.12);
+    z-index:110; grid-template-columns:1fr; gap:10px;
   }
-  .topbar .nav .menu.active{ display: grid !important; }
+  .topbar .nav .menu.active{ display:grid !important; }
 }
 
-/* seguridad contra scroll lateral */
-html, body{ max-width:100%; overflow-x:hidden; }
+/* anti scroll lateral por si acaso */
+html,body{ max-width:100%; overflow-x:hidden; }

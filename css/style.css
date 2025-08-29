@@ -213,7 +213,8 @@ html{scroll-behavior: smooth;}
 
 @media (min-width:769px){
   .topbar .nav{ height:82px !important; }
-  .topbar .brand img{ height:100px !important; max-height:200px !important; }
+  .topbar .brand img{ height:100px !important; max-height:200px !important;}
+  .auth{margin-right: 12px !important;
 }
 
 /* Móvil: nav en 3 columnas (logo | botones | ☰) */
@@ -247,7 +248,12 @@ html{scroll-behavior: smooth;}
     border-width:2px !important;
   }
   .auth .btn-login{ border-radius:12px !important; }
-  .auth .cta{ border-radius:16px !important; } /* mantiene píldora */
+  .auth .cta{ 
+background: var(--brand) !important;
+    color:#fff !important;
+    border: 2px solid var(--brand) !important;
+    border-radius: 12px !important;   /* antes 16px */
+    padding: 4px 10px !important;} /* mantiene píldora */
 
   /* hamburguesa fija en la 3ª columna (nada absoluto) */
   .hamburger{

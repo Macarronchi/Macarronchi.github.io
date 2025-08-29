@@ -311,3 +311,63 @@ html{scroll-behavior: smooth;}
     font-weight: 700;
   }
 }
+
+@media (max-width: 768px){
+  /* nav en 1 fila */
+  .topbar .nav{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:8px !important;
+    flex-wrap:nowrap !important;      /* evita que salten a otra línea */
+  }
+
+  /* logo más pequeño para que quepa todo */
+  .brand img{
+    height:36px !important;
+    max-height:36px !important;
+  }
+
+  /* grupo de botones a la derecha del logo */
+  .auth{
+    order:2;
+    margin-left:auto;                 /* empuja los botones a la derecha */
+    display:flex;
+    gap:8px;
+  }
+
+  /* botones compactos y CENTRADOS vertical/horizontal */
+  .auth a{
+    display:flex;                     /* centra el texto */
+    align-items:center;
+    justify-content:center;
+    min-height:40px;                  /* alto consistente */
+    padding:8px 14px !important;      /* menos ancho */
+    font-size:.95rem !important;      /* más pequeño */
+    line-height:1 !important;         /* evita que quede “alto” */
+    border-width:2px;                 /* mantiene el borde bonito */
+    white-space:nowrap;               /* evita romper el texto */
+  }
+
+  /* estilos específicos */
+  .auth .btn-login{
+    background:#fff;
+    color:var(--brand);
+    border:2px solid var(--brand);
+    border-radius:16px;               /* cuadradito suave */
+  }
+  .auth .cta{
+    background:var(--brand);
+    color:#fff;
+    border:2px solid var(--brand);
+    border-radius:22px;               /* píldora bonita, más compacta */
+  }
+
+  /* hamburguesa al extremo derecho */
+  .hamburger{
+    order:3;
+    margin-left:8px;
+    font-size:1.8rem;
+    z-index:100 !important;           /* asegura el toque */
+  }
+}

@@ -196,12 +196,6 @@ html{scroll-behavior: smooth;}
 .collapsible{overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-8px); transition: max-height .6s ease, opacity .35s ease, transform .35s ease;}
 .collapsible.open{max-height: 2000px; opacity: 1; transform: none;}
 #contacto{background: #faf7fc; padding: 24px 0; border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);}
-
-@media (min-width:769px){
-  .topbar .nav{ height:82px !important; }
-  .topbar .brand img{ height:100px !important; max-height:200px !important; }
-}
-
 /* Móvil: nav en 3 columnas (logo | botones | ☰) */
 @media (max-width:768px){
   /* grid robusto, sin wraps */

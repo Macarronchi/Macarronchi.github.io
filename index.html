@@ -254,6 +254,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<script>
+document.getElementById('hamburger').addEventListener('click', function() {
+  document.getElementById('menu').classList.toggle('active');
+});
+</script>
+
 
   <link rel="icon" href="img/LogoWeb.png?v=3" type="image/png">
   <link rel="shortcut icon" href="img/LogoWeb.png?v=3" type="image/png">
@@ -266,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <img src="img/logo.png" alt="Armonía Viva"> 
     </div> 
     
+    <button class="hamburger" id="hamburger">&#9776;</button>
     <div class="menu"> 
       <a href="#inicio">Inicio</a> 
       <a href="#cursos">Cursos</a> 

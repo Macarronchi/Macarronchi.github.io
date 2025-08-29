@@ -209,106 +209,54 @@ html{scroll-behavior: smooth;}
 @media (max-width: 992px){.videos-grid{ grid-template-columns: 1fr !important; }}
 @media (max-width: 992px){.testi-track{display: flex !important;gap: 16px !important;overflow-x: auto !important;scroll-snap-type: x mandatory !important;padding: 12px 24px !important;}
 .testi-card{ min-width: 82% !important; scroll-snap-align: start !important; }}
-
-@media (max-width: 768px){
-  /* fila compacta */
-  .topbar .nav{
-    position:relative !important;
-    display:flex !important;
-    align-items:center !important;
-    flex-wrap:nowrap !important;
-    gap:8px !important;
-    width:100% !important;
-    padding:8px 12px !important;
-  }
-
-  .brand img{ height:32px !important; max-height:32px !important; }
-
-  /* botones: SIN auto-margin */
-  .auth{
-    order:2;
-    margin-left:0 !important;
-    display:flex; gap:8px; z-index:80; position:relative;
-  }
-  .auth a{
-    display:flex; align-items:center; justify-content:center;
-    min-height:36px; padding:6px 12px !important;
-    font-size:.9rem !important; line-height:1 !important; white-space:nowrap;
-    border-width:2px;
-  }
-  .auth .btn-login{ background:#fff; color:var(--brand);
-    border:2px solid var(--brand); border-radius:14px; }
-  .auth .cta{ background:var(--brand); color:#fff;
-    border:2px solid var(--brand); border-radius:18px; }
-
-  /* hamburguesa SIEMPRE visible y al extremo derecho */
-  .hamburger{
-    order:3;
-    margin-left:auto !important;   /* <-- clave */
-    display:block !important;
-    width:40px; height:40px;       /* área táctil cómoda */
-    display:grid !important; place-items:center;
-    font-size:1.6rem; line-height:1;
-    background:none; border:0; color:var(--brand);
-    position:relative; z-index:100 !important;
-    visibility:visible !important; opacity:1 !important;
-    pointer-events:auto !important;
-  }
-
-  /* menú desplegable de borde a borde */
-  .topbar .nav .menu{
-    display:none !important;
-    position:absolute; top:100%; left:0; right:0;
-    margin-top:8px; background:#fff; padding:12px; border-radius:12px;
-    box-shadow:0 12px 24px rgba(0,0,0,.12);
-    z-index:90; grid-template-columns:1fr; gap:10px;
-  }
-  .topbar .nav .menu.active{ display:grid !important; }
-  .topbar .nav .menu a{
-    text-align:center !important; padding:10px 0 !important;
-    background:#fff !important; border-radius:10px !important;
-    box-shadow:0 4px 12px rgba(0,0,0,.05) !important; font-size:1rem !important;
-  }
-}
-
-/* seguridad contra scroll lateral */
-html, body{ max-width:100%; overflow-x:hidden; }
-header, .topbar, .hero{ max-width:100vw; overflow-x:clip; }
+/* menú hamburguesa */
 
 @media (max-width:768px){
-  /* deja un hueco a la derecha para la hamburguesa */
+  /* el nav deja hueco a la derecha para la hamburguesa */
   .topbar .nav{
     position: relative !important;
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
     width: 100% !important;
-    padding: 8px 56px 8px 12px !important; /* <-- 56px de padding-right */
+    padding: 8px 72px 8px 12px !important; /* <- hueco grande a la derecha */
+    box-sizing: border-box !important;
   }
 
-  /* botones más compactos */
-  .auth{ order:2; margin-left:auto; display:flex; gap:8px; }
+  .brand img{ height:32px !important; max-height:32px !important; }
+
+  /* botones compactos y no se “estiran” debajo de la hamburguesa */
+  .auth{
+    order: 2;
+    margin-left: auto;
+    display: flex; gap: 8px;
+    flex: 0 1 auto;                 /* <- evita ocupar todo el ancho */
+    position: relative; z-index: 80;
+  }
   .auth a{
     display:flex; align-items:center; justify-content:center;
     min-height:34px; padding:5px 10px !important;
     font-size:.88rem !important; line-height:1 !important; white-space:nowrap;
     border-width:2px;
   }
+  .auth .btn-login{ background:#fff; color:var(--brand); border:2px solid var(--brand); border-radius:14px; }
+  .auth .cta{ background:var(--brand); color:#fff; border:2px solid var(--brand); border-radius:18px; }
 
-  /* hamburguesa SIEMPRE visible y clickeable */
+  /* HAMBURGUESA SIEMPRE VISIBLE, fuera del flujo y con contraste */
   .hamburger{
-    position: absolute;          /* fuera del flujo, no la empujan */
-    right: 12px;
-    top: 50%;
+    position: absolute; right: 12px; top: 50%;
     transform: translateY(-50%);
     width: 40px; height: 40px;
     display: grid !important; place-items: center;
     font-size: 1.7rem; line-height: 1;
-    background: none; border: 0; color: var(--brand);
-    z-index: 120 !important;     /* por encima de todo */
+    color: var(--brand);
+    background: #fff;                 /* <- contraste sobre el botón morado */
+    border-radius: 10px;              /* puedes quitarlo si no lo quieres */
+    z-index: 120 !important;
+    border: 0;
   }
 
-  /* menú desplegable a lo ancho del nav */
+  /* menú desplegable de borde a borde */
   .topbar .nav .menu{
     display: none !important;
     position: absolute; left: 0; right: 0; top: 100%;
@@ -318,3 +266,6 @@ header, .topbar, .hero{ max-width:100vw; overflow-x:clip; }
   }
   .topbar .nav .menu.active{ display: grid !important; }
 }
+
+/* seguridad contra scroll lateral */
+html, body{ max-width:100%; overflow-x:hidden; }

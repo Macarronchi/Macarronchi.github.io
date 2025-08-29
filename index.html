@@ -254,13 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<script>
-document.getElementById('hamburger').addEventListener('click', function() {
-  document.getElementById('menu').classList.toggle('active');
-});
-</script>
-
-
   <link rel="icon" href="img/LogoWeb.png?v=3" type="image/png">
   <link rel="shortcut icon" href="img/LogoWeb.png?v=3" type="image/png">
 </head>
@@ -272,8 +265,9 @@ document.getElementById('hamburger').addEventListener('click', function() {
       <img src="img/logo.png" alt="Armonía Viva"> 
     </div> 
     
-    <button class="hamburger" id="hamburger">&#9776;</button>
-    <div class="menu"> 
+    <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="menu">&#9776;</button>
+
+    <div class="menu" id="menu">
       <a href="#inicio">Inicio</a> 
       <a href="#cursos">Cursos</a> 
       <a href="#calendario">Calendario</a> 
@@ -1032,6 +1026,28 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset(); // opcional: limpia el formulario
       }, 2400);
     }, 300); // pequeño delay para sensación de respuesta
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn  = document.getElementById('hamburger');
+  const menu = document.getElementById('menu');
+
+  if (!btn || !menu) return;
+
+  btn.addEventListener('click', () => {
+    const open = menu.classList.toggle('active');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  // Cerrar al hacer click en un enlace
+  menu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      menu.classList.remove('active');
+      btn.setAttribute('aria-expanded','false');
+    });
   });
 });
 </script>

@@ -216,3 +216,40 @@ html{scroll-behavior: smooth;}
 @media (max-width: 992px){.videos-grid{ grid-template-columns: 1fr !important; }}
 @media (max-width: 992px){.testi-track{display: flex !important;gap: 16px !important;overflow-x: auto !important;scroll-snap-type: x mandatory !important;padding: 12px 24px !important;}
 .testi-card{ min-width: 82% !important; scroll-snap-align: start !important; }}
+
+/* --- Hamburguesa --- */
+@media (max-width: 768px){
+  .topbar .nav{ position: relative !important; height:auto !important; gap:12px !important; }
+
+  /* botón hamburguesa visible */
+  .hamburger{ display:block; order:2; font-size:1.8rem; background:none; border:0; color:var(--brand); }
+
+  /* por defecto OCULTO en móvil */
+  .topbar .nav .menu{
+    display:none !important;               /* <-- clave */
+    position:absolute; top:100%; left:0; right:0;
+    background:#fff; padding:12px; border-radius:12px;
+    box-shadow:0 10px 24px rgba(0,0,0,.1);
+    z-index: 50;
+    grid-template-columns:1fr;             /* cuando esté active será grid */
+    gap:10px;
+  }
+  .topbar .nav .menu.active{
+    display:grid !important;               /* <-- se muestra solo con .active */
+  }
+
+  /* botones dentro del menú */
+  .topbar .nav .menu a{
+    text-align:center !important;
+    padding:10px 0 !important;
+    background:#fff !important;
+    border-radius:10px !important;
+    box-shadow:0 4px 12px rgba(0,0,0,.05) !important;
+    font-size:1rem !important;
+  }
+
+  /* Acciones: mostrar también “Ingresar” en móvil */
+  .auth{ order:3; display:flex; gap:8px; }
+  .auth .btn-login{ display:inline-block !important; }  /* <-- vuelve a aparecer */
+  .auth .cta{ padding:8px 12px !important; }
+}

@@ -198,13 +198,6 @@ html{scroll-behavior: smooth;}
 #contacto{background: #faf7fc; padding: 24px 0; border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);}
 
 /*# Responsive */
-
-@media (max-width: 768px){.topbar .brand img{height: 44px !important;max-height: 44px !important;}
-.topbar .nav{height: auto !important;gap: 12px !important;}
-.topbar .nav .menu{display: grid !important; grid-template-columns: repeat(3, 1fr) !important;gap: 8px !important;width: 100% !important;order: 3 !important;justify-content: stretch !important;}
-.topbar .nav .menu a{text-align: center !important;padding: 10px 0 !important;background: #fff !important;border-radius: 10px !important;box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;font-size: .98rem !important;}
-.auth .btn-login{ display: none !important; }
-.auth .cta{ padding: 8px 12px !important; }}
 @media (max-width: 992px){.hero-inner{grid-template-columns: 1fr !important;height: auto !important;            /* antes 52vh; puede recortar */text-align: center !important;padding-top: 28px !important;gap: 18px !important;}
 .hero .art img{width: 82% !important;height: auto !important;margin: 0 auto !important;}
 .actions{ justify-content: center !important; }}
@@ -283,91 +276,69 @@ html{scroll-behavior: smooth;}
   font-weight: 700;
 }
 
-/* --- Botones en móvil --- */
+/* --- NAVBAR MÓVIL: una sola línea + menú hamburguesa --- */
 @media (max-width: 768px){
-  .auth {
-    flex: 1;
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .auth .btn-login {
-    flex: 1;
-    text-align: center;
-    border-radius: 12px !important; /* cuadradito suave */
-    background: #fff;
-    border: 2px solid var(--brand);
-    color: var(--brand);
-    font-weight: 700;
-  }
-
-  .auth .cta {
-    flex: 1;
-    text-align: center;
-    border-radius: 30px !important;  /* Inscríbete conserva píldora */
-    background: var(--brand);
-    color: #fff;
-    font-weight: 700;
-  }
-}
-
-@media (max-width: 768px){
-  /* nav en 1 fila */
+  /* header en una sola fila */
   .topbar .nav{
     display:flex !important;
     align-items:center !important;
     justify-content:flex-start !important;
     gap:8px !important;
-    flex-wrap:nowrap !important;      /* evita que salten a otra línea */
+    flex-wrap:nowrap !important;
   }
 
-  /* logo más pequeño para que quepa todo */
+  /* logo más pequeño */
   .brand img{
-    height:36px !important;
-    max-height:36px !important;
+    height:34px !important;
+    max-height:34px !important;
   }
 
-  /* grupo de botones a la derecha del logo */
+  /* botones a la derecha del logo */
   .auth{
     order:2;
-    margin-left:auto;                 /* empuja los botones a la derecha */
+    margin-left:auto;                  /* empuja los botones a la derecha */
     display:flex;
     gap:8px;
   }
 
-  /* botones compactos y CENTRADOS vertical/horizontal */
+  /* botones compactos y centrados vertical/horizontal */
   .auth a{
-    display:flex;                     /* centra el texto */
-    align-items:center;
-    justify-content:center;
-    min-height:40px;                  /* alto consistente */
-    padding:8px 14px !important;      /* menos ancho */
-    font-size:.95rem !important;      /* más pequeño */
-    line-height:1 !important;         /* evita que quede “alto” */
-    border-width:2px;                 /* mantiene el borde bonito */
-    white-space:nowrap;               /* evita romper el texto */
+    display:flex; align-items:center; justify-content:center;
+    min-height:38px;                   /* alto consistente */
+    padding:6px 12px !important;       /* menos ancho */
+    font-size:.92rem !important;
+    line-height:1 !important;
+    white-space:nowrap;
+    border-width:2px;
   }
-
-  /* estilos específicos */
   .auth .btn-login{
-    background:#fff;
-    color:var(--brand);
+    background:#fff; color:var(--brand);
     border:2px solid var(--brand);
-    border-radius:16px;               /* cuadradito suave */
+    border-radius:14px;
   }
   .auth .cta{
-    background:var(--brand);
-    color:#fff;
+    background:var(--brand); color:#fff;
     border:2px solid var(--brand);
-    border-radius:22px;               /* píldora bonita, más compacta */
+    border-radius:18px;                /* píldora bonita */
   }
 
   /* hamburguesa al extremo derecho */
   .hamburger{
     order:3;
     margin-left:8px;
-    font-size:1.8rem;
-    z-index:100 !important;           /* asegura el toque */
+    font-size:1.6rem;
+    background:none; border:0; color:var(--brand);
+    z-index:100 !important;
+    position:relative;
   }
+
+  /* menú desplegable oculto por defecto */
+  .topbar .nav .menu{
+    display:none !important;
+    position:absolute; top:calc(100% + 8px); left:12px; right:12px;
+    background:#fff; padding:12px; border-radius:12px;
+    box-shadow:0 10px 24px rgba(0,0,0,.12);
+    z-index:90; grid-template-columns:1fr; gap:10px;
+  }
+  .topbar .nav .menu.active{ display:grid !important; }
 }

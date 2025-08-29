@@ -197,66 +197,53 @@ html{scroll-behavior: smooth;}
 .collapsible.open{max-height: 2000px; opacity: 1; transform: none;}
 #contacto{background: #faf7fc; padding: 24px 0; border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);}
 
-/*# Responsive */
-@media (max-width: 992px){.hero-inner{grid-template-columns: 1fr !important;height: auto !important;            /* antes 52vh; puede recortar */text-align: center !important;padding-top: 28px !important;gap: 18px !important;}
-.hero .art img{width: 82% !important;height: auto !important;margin: 0 auto !important;}
-.actions{ justify-content: center !important; }}
-@media (max-width: 992px){.grid-cursos{ grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }}
-@media (max-width: 600px){.grid-cursos{ grid-template-columns: 1fr !important; }.curso{ display: flex !important; gap: 12px !important; }.curso .icono{ flex: 0 0 56px !important; height: auto !important; }}
-#calendario{ overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
-.cal-grid{ min-width: 820px !important;}
-@media (max-width: 768px){.galeria .galeria-grid{ grid-template-columns: 1fr !important; }}
-@media (max-width: 992px){.videos-grid{ grid-template-columns: 1fr !important; }}
-@media (max-width: 992px){.testi-track{display: flex !important;gap: 16px !important;overflow-x: auto !important;scroll-snap-type: x mandatory !important;padding: 12px 24px !important;}
-.testi-card{ min-width: 82% !important; scroll-snap-align: start !important; }}
-
-/* Ocultar menú y mostrar hamburguesa */
 @media (max-width:768px){
   /* Nav en 3 columnas: logo | botones | ☰ */
   .topbar .nav{
     display:grid !important;
-    grid-template-columns: minmax(110px,auto) 1fr auto !important; /* más “colchón” para el logo */
+    grid-template-columns: minmax(150px, 0.6fr) 1fr auto !important; /* + espacio para el logo */
     align-items:center !important;
     gap:10px !important;
-    height:auto !important;
-    min-height:56px !important;
+    min-height:68px !important;      /* sube altura del header acorde al logo */
     padding:8px 12px !important;
-    position:relative !important;
     box-sizing:border-box !important;
   }
 
-  /* Tamaño del logo SOLO en móvil */
+  /* LOGO más grande y sin encogerse */
+  .topbar .brand{ display:flex; align-items:center; min-width:150px !important; }
   .topbar .brand img{
-    height:30px !important;           /* prueba 30–32 si quieres un toque mayor */
-    max-height:30px !important;
+    height: clamp(42px, 12vw, 64px) !important;  /* antes 30px */
+    max-height: clamp(42px, 12vw, 64px) !important;
+    width:auto !important;
+    display:block !important;
+    object-fit:contain !important;
+    flex:0 0 auto !important;                    /* evita que se reduzca por el grid/flex */
   }
 
-  /* Botones compactos, en una línea */
+  /* Botones compactos */
   .auth{
     grid-column:2; justify-self:end !important;
     display:flex !important; gap:6px !important;
     min-width:0 !important; white-space:nowrap !important;
-    margin-right:14px !important;      /* los corre un poco a la izquierda */
+    margin-right:12px !important;
   }
   .auth a{
     display:flex; align-items:center; justify-content:center;
-    min-height:30px !important; padding:4px 9px !important;
-    font-size:.84rem !important; line-height:1 !important;
+    min-height:34px !important; padding:6px 10px !important;
+    font-size:.9rem !important; line-height:1 !important;
     border-width:2px !important;
   }
   .auth .btn-login{ border-radius:12px !important; }
   .auth .cta{
     background:var(--brand) !important; color:#fff !important;
-    border:2px solid var(--brand) !important;
-    border-radius:16px !important;     /* vuelve el pill morado */
+    border:2px solid var(--brand) !important; border-radius:16px !important;
   }
 
-  /* Hamburguesa fija en la 3ª columna */
+  /* Hamburguesa */
   .hamburger{
     grid-column:3; justify-self:end !important;
-    width:34px; height:34px; display:grid !important; place-items:center;
-    font-size:1.4rem; background:none; border:0; color:var(--brand);
-    position:static !important;
+    width:38px; height:38px; display:grid !important; place-items:center;
+    font-size:1.5rem; background:none; border:0; color:var(--brand);
   }
 
   /* Menú desplegable */
@@ -270,7 +257,9 @@ html{scroll-behavior: smooth;}
   .topbar .nav .menu.active{ display:grid !important; }
 }
 
-/* extra angostos */
+/* Extra angostos */
 @media (max-width:380px){
-  .auth a{ padding:3px 8px !important; font-size:.80rem !important; }
+  .topbar .nav{ grid-template-columns: minmax(130px, 0.7fr) 1fr auto !important; }
+  .topbar .brand img{ height: clamp(40px, 13vw, 56px) !important; }
+  .auth a{ padding:4px 8px !important; font-size:.84rem !important; }
 }

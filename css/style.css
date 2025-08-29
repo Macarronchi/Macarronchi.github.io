@@ -212,9 +212,10 @@ html{scroll-behavior: smooth;}
 
 /* Ocultar menú y mostrar hamburguesa */
 @media (max-width:768px){
+  /* Nav en 3 columnas: logo | botones | ☰ */
   .topbar .nav{
     display:grid !important;
-    grid-template-columns:auto 1fr auto !important; /* logo | botones | ☰ */
+    grid-template-columns: minmax(110px,auto) 1fr auto !important; /* más “colchón” para el logo */
     align-items:center !important;
     gap:10px !important;
     height:auto !important;
@@ -224,33 +225,33 @@ html{scroll-behavior: smooth;}
     box-sizing:border-box !important;
   }
 
-  /* SOLO móvil: tamaño del logo */
+  /* Tamaño del logo SOLO en móvil */
   .topbar .brand img{
-    height:26px !important;        /* prueba 24–28 si hace falta */
-    max-height:26px !important;
+    height:30px !important;           /* prueba 30–32 si quieres un toque mayor */
+    max-height:30px !important;
   }
 
-  /* botones compactos y en una sola línea */
+  /* Botones compactos, en una línea */
   .auth{
     grid-column:2; justify-self:end !important;
     display:flex !important; gap:6px !important;
     min-width:0 !important; white-space:nowrap !important;
-    margin-right:6px !important;
+    margin-right:14px !important;      /* los corre un poco a la izquierda */
   }
   .auth a{
     display:flex; align-items:center; justify-content:center;
-    min-height:30px !important; padding:4px 10px !important;
-    font-size:.86rem !important; line-height:1 !important;
+    min-height:30px !important; padding:4px 9px !important;
+    font-size:.84rem !important; line-height:1 !important;
     border-width:2px !important;
   }
   .auth .btn-login{ border-radius:12px !important; }
   .auth .cta{
     background:var(--brand) !important; color:#fff !important;
     border:2px solid var(--brand) !important;
-    border-radius:16px !important;   /* rectángulo/píldora morado */
+    border-radius:16px !important;     /* vuelve el pill morado */
   }
 
-  /* hamburguesa en la 3ª columna */
+  /* Hamburguesa fija en la 3ª columna */
   .hamburger{
     grid-column:3; justify-self:end !important;
     width:34px; height:34px; display:grid !important; place-items:center;
@@ -258,7 +259,7 @@ html{scroll-behavior: smooth;}
     position:static !important;
   }
 
-  /* menú desplegable */
+  /* Menú desplegable */
   .topbar .nav .menu{
     display:none !important;
     position:absolute; left:8px; right:8px; top:calc(100% + 8px);

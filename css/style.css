@@ -196,3 +196,89 @@ html{scroll-behavior: smooth;}
 .collapsible{overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-8px); transition: max-height .6s ease, opacity .35s ease, transform .35s ease;}
 .collapsible.open{max-height: 2000px; opacity: 1; transform: none;}
 #contacto{background: #faf7fc; padding: 24px 0; border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);}
+
+/*# Responsive */
+
+@media (max-width: 768px){
+  .topbar .brand img{
+    height: 44px !important;            /* antes quedaba en 100px por !important */
+    max-height: 44px !important;
+  }
+
+  /* Romper la fila del menú y hacerlo grid de 3 columnas */
+  .topbar .nav{ 
+    height: auto !important;
+    gap: 12px !important;
+  }
+  .topbar .nav .menu{
+    display: grid !important;            /* anula display:flex !important */
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    order: 3 !important;                 /* menú abajo del logo/botón */
+    justify-content: stretch !important;
+  }
+  .topbar .nav .menu a{
+    text-align: center !important;
+    padding: 10px 0 !important;
+    background: #fff !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;
+    font-size: .98rem !important;
+  }
+
+  /* muestra solo “Inscríbete” para ahorrar espacio */
+  .auth .btn-login{ display: none !important; }
+  .auth .cta{ padding: 8px 12px !important; }
+}
+
+/* HERO: pasar a 1 columna en tablets/móviles y que no “corte” */
+@media (max-width: 992px){
+  .hero-inner{
+    grid-template-columns: 1fr !important;
+    height: auto !important;            /* antes 52vh; puede recortar */
+    text-align: center !important;
+    padding-top: 28px !important;
+    gap: 18px !important;
+  }
+  .hero .art img{
+    width: 82% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+  }
+  .actions{ justify-content: center !important; }
+}
+
+/* CURSOS: 2 col → 1 col en pantallas pequeñas */
+@media (max-width: 992px){
+  .grid-cursos{ grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }
+}
+@media (max-width: 600px){
+  .grid-cursos{ grid-template-columns: 1fr !important; }
+  .curso{ display: flex !important; gap: 12px !important; }
+  .curso .icono{ flex: 0 0 56px !important; height: auto !important; }
+}
+
+/* CALENDARIO: scroll horizontal seguro */
+#calendario{ overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
+.cal-grid{ min-width: 820px !important; }
+
+/* GALERÍA y VIDEOS: 1 columna en móvil */
+@media (max-width: 768px){
+  .galeria .galeria-grid{ grid-template-columns: 1fr !important; }
+}
+@media (max-width: 992px){
+  .videos-grid{ grid-template-columns: 1fr !important; }
+}
+
+/* RESEÑAS: carrusel táctil en móvil */
+@media (max-width: 992px){
+  .testi-track{
+    display: flex !important;
+    gap: 16px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    padding: 12px 24px !important;
+  }
+  .testi-card{ min-width: 82% !important; scroll-snap-align: start !important; }
+}

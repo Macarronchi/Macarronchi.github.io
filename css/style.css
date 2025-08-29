@@ -213,33 +213,31 @@ html{scroll-behavior: smooth;}
 
 @media (min-width:769px){
   .topbar .nav{ height:82px !important; }
-  .topbar .brand img{ height:100px !important; max-height:200px !important;}
-  .auth{margin-right: 12px !important;
+  .topbar .brand img{ height:100px !important; max-height:200px !important; }
 }
 
-/* Móvil: nav en 3 columnas (logo | botones | ☰) */
+/* -------- Móvil: logo | botones | ☰ en GRID -------- */
 @media (max-width:768px){
-  /* grid robusto, sin wraps */
   .topbar .nav{
     display:grid !important;
-    grid-template-columns:auto 1fr auto !important;
+    grid-template-columns:auto 1fr auto !important; /* logo | botones | ☰ */
     align-items:center !important;
-    gap:6px !important;
-    height:auto !important;
-    min-height:56px !important;
+    column-gap:14px !important;     /* <-- separa botones y hamburguesa */
+    height:auto !important; min-height:56px !important;
     padding:8px 12px !important;
     position:relative !important;
     box-sizing:border-box !important;
   }
 
-  /* ¡OJO a la especificidad! Sobrescribe la versión grande: */
+  /* logo más pequeño */
   .topbar .brand img{ height:18px !important; max-height:18px !important; }
 
-  /* píldoras compactas, en una sola línea */
+  /* botones compactos y sin saltos */
   .auth{
     grid-column:2; justify-self:end !important;
     display:flex !important; gap:6px !important;
-    white-space:nowrap !important; min-width:0 !important;
+    min-width:0 !important; white-space:nowrap !important;
+    margin-right:6px !important;  /* los empuja un pelín a la izquierda */
   }
   .auth a{
     display:flex; align-items:center; justify-content:center;
@@ -248,23 +246,21 @@ html{scroll-behavior: smooth;}
     border-width:2px !important;
   }
   .auth .btn-login{ border-radius:12px !important; }
-  .auth .cta{ 
-background: var(--brand) !important;
-    color:#fff !important;
-    border: 2px solid var(--brand) !important;
-    border-radius: 12px !important;   /* antes 16px */
-    padding: 4px 10px !important;} /* mantiene píldora */
+  .auth .cta{
+    background:var(--brand) !important; color:#fff !important;
+    border:2px solid var(--brand) !important;
+    border-radius:12px !important;           /* rectángulo morado */
+  }
 
-  /* hamburguesa fija en la 3ª columna (nada absoluto) */
+  /* hamburguesa anclada a la 3ª columna (sin absolute) */
   .hamburger{
     grid-column:3; justify-self:end !important;
     width:34px; height:34px; display:grid !important; place-items:center;
     font-size:1.4rem; background:none; border:0; color:var(--brand);
-    z-index:200 !important;
-    position:static !important;          /* <- clave: sin absolute */
+    position:static !important;
   }
 
-  /* menú desplegable anclado al nav */
+  /* menú desplegable debajo del nav */
   .topbar .nav .menu{
     display:none !important;
     position:absolute; left:8px; right:8px; top:calc(100% + 8px);
@@ -275,7 +271,7 @@ background: var(--brand) !important;
   .topbar .nav .menu.active{ display:grid !important; }
 }
 
-/* extra angostos */
+/* extra angostos: aprieta un poquito más */
 @media (max-width:380px){
   .auth a{ padding:3px 6px !important; font-size:.78rem !important; }
 }

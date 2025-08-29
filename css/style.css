@@ -196,14 +196,28 @@ html{scroll-behavior: smooth;}
 .collapsible{overflow: hidden; max-height: 0; opacity: 0; transform: translateY(-8px); transition: max-height .6s ease, opacity .35s ease, transform .35s ease;}
 .collapsible.open{max-height: 2000px; opacity: 1; transform: none;}
 #contacto{background: #faf7fc; padding: 24px 0; border-top: 1px solid rgba(0,0,0,.06); border-bottom: 1px solid rgba(0,0,0,.06);}
-/* Móvil: nav en 3 columnas (logo | botones | ☰) */
+
+/*# Responsive */
+@media (max-width: 992px){.hero-inner{grid-template-columns: 1fr !important;height: auto !important;            /* antes 52vh; puede recortar */text-align: center !important;padding-top: 28px !important;gap: 18px !important;}
+.hero .art img{width: 82% !important;height: auto !important;margin: 0 auto !important;}
+.actions{ justify-content: center !important; }}
+@media (max-width: 992px){.grid-cursos{ grid-template-columns: repeat(2, 1fr) !important; gap: 18px !important; }}
+@media (max-width: 600px){.grid-cursos{ grid-template-columns: 1fr !important; }.curso{ display: flex !important; gap: 12px !important; }.curso .icono{ flex: 0 0 56px !important; height: auto !important; }}
+#calendario{ overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 10px; }
+.cal-grid{ min-width: 820px !important;}
+@media (max-width: 768px){.galeria .galeria-grid{ grid-template-columns: 1fr !important; }}
+@media (max-width: 992px){.videos-grid{ grid-template-columns: 1fr !important; }}
+@media (max-width: 992px){.testi-track{display: flex !important;gap: 16px !important;overflow-x: auto !important;scroll-snap-type: x mandatory !important;padding: 12px 24px !important;}
+.testi-card{ min-width: 82% !important; scroll-snap-align: start !important; }}
+
+/* Ocultar menú y mostrar hamburguesa */
 @media (max-width:768px){
-  /* grid robusto, sin wraps */
+  /* Nav en 3 columnas: logo | botones | ☰ */
   .topbar .nav{
     display:grid !important;
-    grid-template-columns:auto 1fr auto !important;
+    grid-template-columns: minmax(110px,auto) 1fr auto !important; /* más “colchón” para el logo */
     align-items:center !important;
-    gap:6px !important;
+    gap:10px !important;
     height:auto !important;
     min-height:56px !important;
     padding:8px 12px !important;
@@ -211,34 +225,41 @@ html{scroll-behavior: smooth;}
     box-sizing:border-box !important;
   }
 
-  /* ¡OJO a la especificidad! Sobrescribe la versión grande: */
-  .topbar .brand img{ height:18px !important; max-height:18px !important; }
+  /* Tamaño del logo SOLO en móvil */
+  .topbar .brand img{
+    height:30px !important;           /* prueba 30–32 si quieres un toque mayor */
+    max-height:30px !important;
+  }
 
-  /* píldoras compactas, en una sola línea */
+  /* Botones compactos, en una línea */
   .auth{
     grid-column:2; justify-self:end !important;
     display:flex !important; gap:6px !important;
-    white-space:nowrap !important; min-width:0 !important;
+    min-width:0 !important; white-space:nowrap !important;
+    margin-right:14px !important;      /* los corre un poco a la izquierda */
   }
   .auth a{
     display:flex; align-items:center; justify-content:center;
-    min-height:28px !important; padding:4px 8px !important;
-    font-size:.80rem !important; line-height:1 !important;
+    min-height:30px !important; padding:4px 9px !important;
+    font-size:.84rem !important; line-height:1 !important;
     border-width:2px !important;
   }
   .auth .btn-login{ border-radius:12px !important; }
-  .auth .cta{ border-radius:16px !important; } /* mantiene píldora */
+  .auth .cta{
+    background:var(--brand) !important; color:#fff !important;
+    border:2px solid var(--brand) !important;
+    border-radius:16px !important;     /* vuelve el pill morado */
+  }
 
-  /* hamburguesa fija en la 3ª columna (nada absoluto) */
+  /* Hamburguesa fija en la 3ª columna */
   .hamburger{
     grid-column:3; justify-self:end !important;
     width:34px; height:34px; display:grid !important; place-items:center;
     font-size:1.4rem; background:none; border:0; color:var(--brand);
-    z-index:200 !important;
-    position:static !important;          /* <- clave: sin absolute */
+    position:static !important;
   }
 
-  /* menú desplegable anclado al nav */
+  /* Menú desplegable */
   .topbar .nav .menu{
     display:none !important;
     position:absolute; left:8px; right:8px; top:calc(100% + 8px);
@@ -251,5 +272,5 @@ html{scroll-behavior: smooth;}
 
 /* extra angostos */
 @media (max-width:380px){
-  .auth a{ padding:3px 6px !important; font-size:.78rem !important; }
+  .auth a{ padding:3px 8px !important; font-size:.80rem !important; }
 }

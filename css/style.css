@@ -212,70 +212,52 @@ html{scroll-behavior: smooth;}
 /* menú hamburguesa */
 
 @media (max-width:768px){
-  /* fila con hueco a la derecha para la hamburguesa */
   .topbar .nav{
     position:relative !important;
     display:flex !important;
     align-items:center !important;
     flex-wrap:nowrap !important;
     gap:6px !important;
+    /* menos padding a la izquierda y MÁS reserva a la derecha
+       para que la hamburguesa no se monte en "Inscríbete" */
+    padding:8px 72px 8px 6px !important; /* PR=72px, PL=6px */
     width:100% !important;
-    padding:8px 64px 8px 12px !important; /* <-- reserva para la hamburguesa */
     box-sizing:border-box !important;
   }
 
   /* logo más pequeño */
-  .brand img{ height:26px !important; max-height:26px !important; }
+  .brand{ margin-right:4px !important; }
+  .brand img{ height:24px !important; max-height:24px !important; }
 
-  /* grupo de botones compacto */
-  .auth{
-    order:2;
-    margin-left:auto;              /* pega los botones a la derecha del logo */
-    display:flex; gap:6px;
-    flex:0 1 auto;                 /* no se expanden a 2 líneas */
-    align-items:center;
-    z-index:80; position:relative;
-  }
+  /* botones compactos (siguen centrados verticalmente) */
+  .auth{ order:2; margin-left:auto; display:flex; gap:6px; }
   .auth a{
     display:flex; align-items:center; justify-content:center;
-    min-height:30px;
-    padding:4px 10px !important;
-    font-size:.88rem !important;
-    line-height:1 !important;
-    white-space:nowrap;
+    min-height:30px; padding:4px 10px !important;
+    font-size:.86rem !important; line-height:1 !important; white-space:nowrap;
     border-width:2px;
   }
-  .auth .btn-login{
-    background:#fff; color:var(--brand);
-    border:2px solid var(--brand); border-radius:12px;
-  }
-  .auth .cta{
-    background:var(--brand); color:#fff;
-    border:2px solid var(--brand); border-radius:18px;
-  }
+  .auth .btn-login{ border-radius:12px; }
+  .auth .cta{ border-radius:18px; }
 
-  /* hamburguesa fija y siempre visible */
+  /* hamburguesa fija, sin solapar */
   .hamburger{
-    position:absolute; right:12px; top:50%;
-    transform:translateY(-50%);
-    width:38px; height:38px;
-    display:grid !important; place-items:center;
-    font-size:1.5rem; line-height:1;
-    background:none; border:0; color:var(--brand);
+    position:absolute; right:12px; top:50%; transform:translateY(-50%);
+    width:38px; height:38px; display:grid !important; place-items:center;
+    font-size:1.5rem; background:none; border:0; color:var(--brand);
     z-index:120 !important;
   }
 
-  /* menú desplegable a lo ancho del nav */
+  /* menú desplegable */
   .topbar .nav .menu{
-    display:none !important;
-    position:absolute; left:0; right:0; top:100%;
-    margin-top:8px;
-    background:#fff; padding:12px; border-radius:12px;
-    box-shadow:0 12px 24px rgba(0,0,0,.12);
-    z-index:110; grid-template-columns:1fr; gap:10px;
+    display:none !important; position:absolute; left:0; right:0; top:100%;
+    margin-top:8px; background:#fff; padding:12px; border-radius:12px;
+    box-shadow:0 12px 24px rgba(0,0,0,.12); z-index:110;
+    grid-template-columns:1fr; gap:10px;
   }
   .topbar .nav .menu.active{ display:grid !important; }
 }
 
-/* anti scroll lateral por si acaso */
-html,body{ max-width:100%; overflow-x:hidden; }
+html, body {
+  overflow-x: hidden;   /* evita el scroll lateral accidental */
+}

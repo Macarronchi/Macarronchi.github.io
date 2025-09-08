@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -277,8 +280,18 @@ document.addEventListener('DOMContentLoaded', () => {
     </div> 
     
     <div class="auth"> 
-      <a class="btn btn-login" href="login.html">Ingresar</a> 
-      <a class="cta btn btn-primary" href="registro.html">Inscríbete</a> 
+    <?php
+      if (isset($_SESSION['tipoUsuario']) && $_SESSION['tipoUsuario'] === 'SuperAdmin') {
+        echo '<a class="btn btn-admin" href="users.php">Gestionar Usuarios</a>';
+        echo '<a class="btn btn-logout" href="logout.php">Cerrar sesión</a>';
+      } elseif (isset($_SESSION['Usuario'])) {
+        echo '<span class="welcome">Bienvenido, ' . $_SESSION['Usuario'] . '</span>';
+        echo '<a class="btn btn-logout" href="logout.php">Cerrar sesión</a>';
+      } else {
+        echo '<a class="btn btn-login" href="login.php">Ingresar</a>';
+        echo '<a class="cta btn btn-primary rounded-3 px-3" href="registro.php">Inscríbete</a>';
+      }
+    ?>
     </div> 
   </nav> 
 </header>
@@ -1034,21 +1047,30 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const btn  = document.getElementById('hamburger');
   const menu = document.getElementById('menu');
-
   if (!btn || !menu) return;
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // evita que otro overlay “robe” el toque
     const open = menu.classList.toggle('active');
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  // Cerrar al hacer click en un enlace
-  menu.querySelectorAll('a').forEach(a => {
+  // cerrar al tocar fuera
+  document.addEventListener('click', (e) => {
+    if (!menu.contains(e.target) && e.target !== btn){
+      menu.classList.remove('active');
+      btn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  // cerrar al tocar un enlace
+  menu.querySelectorAll('a').forEach(a =>
     a.addEventListener('click', () => {
       menu.classList.remove('active');
       btn.setAttribute('aria-expanded','false');
-    });
-  });
+    })
+  );
 });
 </script>
 </body>
